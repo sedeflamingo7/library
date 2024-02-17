@@ -27,11 +27,9 @@ class Library:
     def remove_book(self):
         title_to_remove = input("Enter the title of the book to remove: ")
 
-        # Read file contents and create a list
         self.file.seek(0)
         book_lines = self.file.read().splitlines()
 
-        # Find the index of the book to be deleted
         index_to_remove = -1
         for i, line in enumerate(book_lines):
             if title_to_remove in line:
@@ -39,23 +37,18 @@ class Library:
                 break
 
         if index_to_remove != -1:
-            # Remove the book from the list
             book_lines.pop(index_to_remove)
 
-            # Remove contents of the books.txt
             self.file.seek(0)
             self.file.truncate()
 
-            # Add all elements of the list to the books.txt
             for line in book_lines:
                 self.file.write(line + '\n')
         else:
             print(f"Book with title '{title_to_remove}' not found.")
 
-# Create an object named "lib" with "Library" class
 lib = Library()
 
-# Create a menu to interact with the "lib" object
 while True:
     print("*** MENU ***")
     print("1) List Books")
