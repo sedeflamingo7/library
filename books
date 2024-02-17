@@ -1,0 +1,77 @@
+class Library:
+    def _init_(self):
+        self.file_name = "books.txt"
+        self.file_mode = "a+"
+        self.file = open(self.file_name, self.file_mode)
+
+    def _del_(self):
+        self.file.close()
+
+    def list_books(self):
+        self.file.seek(0)
+        book_lines = self.file.read().splitlines()
+        for line in book_lines:
+            book_info = line.split(',')
+            book_name, author, release_date, num_pages = book_info
+            print(f"Book: {book_name}, Author: {author}")
+
+    def add_book(self):
+        book_title = input("Enter book title: ")
+        book_author = input("Enter book author: ")
+        release_year = input("Enter release year: ")
+        num_pages = input("Enter number of pages: ")
+
+        book_info = f"{book_title},{book_author},{release_year},{num_pages}\n"
+        self.file.write(book_info)
+
+    def remove_book(self):
+        title_to_remove = input("Enter the title of the book to remove: ")
+
+        # Read file contents and create a list
+        self.file.seek(0)
+        book_lines = self.file.read().splitlines()
+
+        # Find the index of the book to be deleted
+        index_to_remove = -1
+        for i, line in enumerate(book_lines):
+            if title_to_remove in line:
+                index_to_remove = i
+                break
+
+        if index_to_remove != -1:
+            # Remove the book from the list
+            book_lines.pop(index_to_remove)
+
+            # Remove contents of the books.txt
+            self.file.seek(0)
+            self.file.truncate()
+
+            # Add all elements of the list to the books.txt
+            for line in book_lines:
+                self.file.write(line + '\n')
+        else:
+            print(f"Book with title '{title_to_remove}' not found.")
+
+# Create an object named "lib" with "Library" class
+lib = Library()
+
+# Create a menu to interact with the "lib" object
+while True:
+    print("*** MENU ***")
+    print("1) List Books")
+    print("2) Add Book")
+    print("3) Remove Book")
+    print("4) Exit")
+
+    menu_choice = input("Enter your choice (1-4): ")
+
+    if menu_choice == '1':
+        lib.list_books()
+    elif menu_choice == '2':
+        lib.add_book()
+    elif menu_choice == '3':
+        lib.remove_book()
+    elif menu_choice == '4':
+        break
+    else:
+        print("Invalid choice. Please enter a valid option.")
